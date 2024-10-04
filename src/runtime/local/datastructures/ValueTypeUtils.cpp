@@ -42,6 +42,10 @@ size_t ValueTypeUtils::sizeOf(ValueTypeCode type) {
         return sizeof(float);
     case ValueTypeCode::F64:
         return sizeof(double);
+    case ValueTypeCode::STR:
+        return sizeof(std::string);
+    case ValueTypeCode::FIXEDSTR16:
+        return sizeof(FixedStr16);
     default:
         throw std::runtime_error("ValueTypeUtils::sizeOf: unknown value type code");
     }
