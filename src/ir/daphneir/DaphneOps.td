@@ -1157,6 +1157,14 @@ def Daphne_GroupJoinOp : Daphne_Op<"groupJoin", [
     let results = (outs FrameOrU:$res, MatrixOf<[Size]>:$lhsTids);
 }
 
+def Daphne_InnerHashJoinOp : Daphne_Op<"innerHashJoin", [
+    DataTypeFrm, ValueTypesConcat,
+    DeclareOpInterfaceMethods<InferFrameLabelsOpInterface>,
+]> {
+    let arguments = (ins FrameOrU:$lhs, FrameOrU:$rhs, StrScalar:$lhsOn, StrScalar:$rhsOn);
+    let results = (outs FrameOrU:$res);
+}
+
 def Daphne_GroupSumOp : Daphne_Op<"groupSum", [
     SameVariadicOperandSize,
     DeclareOpInterfaceMethods<InferFrameLabelsOpInterface>,
