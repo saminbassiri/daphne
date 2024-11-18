@@ -403,6 +403,7 @@
             [["DenseMatrix", "double"], "Frame"],
             [["DenseMatrix", "int64_t"], "Frame"],
             [["DenseMatrix", "uint64_t"], "Frame"],
+            [["DenseMatrix", "std::string"], "Frame"],
             ["Frame", ["DenseMatrix", "double"]],
             ["Frame", ["DenseMatrix", "int64_t"]],
             ["Frame", ["DenseMatrix", "uint64_t"]],
@@ -2092,6 +2093,11 @@
                         ["DenseMatrix", "std::string"],
                         ["DenseMatrix", "std::string"],
                         "const char *"
+                    ],
+                    [
+                        ["DenseMatrix", "int64_t"],
+                        ["DenseMatrix", "std::string"],
+                        "const char *"
                     ]
                 ],
                 "opCodes": [
@@ -2990,7 +2996,12 @@
                 {
                     "type": "const char *",
                     "name": "rhsOn"
+                },
+                {
+                    "type": "int64_t",
+                    "name": "numRowRes"
                 }
+                
             ]
         },
         "instantiations": [[]]
@@ -4316,6 +4327,10 @@
                 {
                     "type": "const char *",
                     "name": "rhsOn"
+                },
+                {
+                    "type": "int64_t",
+                    "name": "numRowRes"
                 }
             ]
         },
