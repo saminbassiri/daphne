@@ -139,6 +139,16 @@ void daphne::GroupJoinOp::inferFrameLabels() {
     res.setType(res.getType().dyn_cast<daphne::FrameType>().withLabels(newLabels));
 }
 
+void daphne::GroupSumOp::inferFrameLabels() {
+    auto newLabels = new std::vector<std::string>();
+    for (Value label : getGroupCols())
+        newLabels->push_back(CompilerUtils::constantOrThrow<std::string>(label));
+    newLabels->push_back(std::string("SUM(") + CompilerUtils::constantOrThrow<std::string>(getAggCol()) +
+                         std::string(")"));
+    Value res = getResult();
+    res.setType(res.getType().dyn_cast<daphne::FrameType>().withLabels(newLabels));
+}
+
 void daphne::SemiJoinOp::inferFrameLabels() {
     auto newLabels = new std::vector<std::string>();
     newLabels->push_back(CompilerUtils::constantOrThrow<std::string>(getLhsOn()));

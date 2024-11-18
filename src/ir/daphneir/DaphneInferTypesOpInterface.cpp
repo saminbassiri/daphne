@@ -215,6 +215,19 @@ std::vector<Type> daphne::GroupJoinOp::inferTypes() {
     return {daphne::FrameType::get(ctx, {lhsOnType, rhsAggType}), daphne::MatrixType::get(ctx, builder.getIndexType())};
 }
 
+std::vector<Type> daphne::GroupSumOp::inferTypes() {
+    std::vector<Type> newColumnTypes;
+
+    auto argFt = getArg().getType().dyn_cast<daphne::FrameType>();
+    for (auto Col : getGroupCols())
+        newColumnTypes.push_back(getFrameColumnTypeByLabel(this->getOperation(), argFt, Col));
+    newColumnTypes.push_back(getFrameColumnTypeByLabel(this->getOperation(), argFt, getAggCol()));
+
+    MLIRContext *ctx = getContext();
+    Builder builder(ctx);
+    return {daphne::FrameType::get(ctx, newColumnTypes)};
+};
+
 std::vector<Type> daphne::SemiJoinOp::inferTypes() {
     auto lhsFt = getLhs().getType().dyn_cast<daphne::FrameType>();
     Type lhsOnType = getFrameColumnTypeByLabel(this->getOperation(), lhsFt, getLhsOn());

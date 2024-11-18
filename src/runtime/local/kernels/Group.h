@@ -24,6 +24,7 @@
 #include <runtime/local/datastructures/Frame.h>
 #include <runtime/local/datastructures/ValueTypeCode.h>
 #include <runtime/local/datastructures/ValueTypeUtils.h>
+#include <runtime/local/kernels/CastSca.h>
 #include <runtime/local/kernels/ExtractCol.h>
 #include <runtime/local/kernels/Order.h>
 #include <util/DeduceType.h>
@@ -278,5 +279,131 @@ template <> struct Group<Frame> {
         DataObjectFactory::destroy(ordered);
     }
 };
+
+// Custom hash function for std::vector<std::string>
+struct VectorStringHash {
+    std::size_t operator()(const std::vector<std::string> &vec) const {
+        std::size_t seed = 0;
+        for (const auto &str : vec) {
+            seed ^= std::hash<std::string>()(str) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+        }
+        return seed;
+    }
+};
+
+// Custom equality function for std::vector<std::string>
+struct VectorStringEqual {
+    bool operator()(const std::vector<std::string> &lhs, const std::vector<std::string> &rhs) const {
+        return lhs == rhs;
+    }
+};
+
+static std::vector<std::string> createGroupKeyFromArgRow(const Frame *arg, int64_t row_idx, int64_t *groupColIdxArg,
+                                                         int64_t numGroupCols) {
+    auto argSchema = arg->getSchema();
+    std::vector<std::string> groupKey;
+    for (int i = 0; i < numGroupCols; i++) {
+        size_t colIdx = groupColIdxArg[i];
+        if (argSchema[colIdx] == ValueTypeCode::F64) {
+            float arg_value = arg->getColumn<float>(colIdx)->get(row_idx, 0);
+            groupKey.push_back(castSca<std::string, float>(arg_value, nullptr));
+        }
+        if (argSchema[colIdx] == ValueTypeCode::SI64) {
+            int64_t arg_value = arg->getColumn<int64_t>(colIdx)->get(row_idx, 0);
+            groupKey.push_back(castSca<std::string, int64_t>(arg_value, nullptr));
+        }
+        if (argSchema[colIdx] == ValueTypeCode::STR) {
+            groupKey.push_back(arg->getColumn<std::string>(colIdx)->get(row_idx, 0));
+        }
+    }
+    return groupKey;
+}
+
+template <typename VTCol>
+static void addNewValueToResult(Frame *res, const Frame *arg, int64_t row_idx_arg, int64_t row_idx_res,
+                                int64_t colIdx_arg, int64_t colIdx_res) {
+    auto argSchema = arg->getSchema();
+    if (argSchema[colIdx_arg] == ValueTypeUtils::codeFor<VTCol>) {
+        const auto arg_value = arg->getColumn<VTCol>(colIdx_arg)->get(row_idx_arg, 0);
+        res->getColumn<VTCol>(colIdx_res)->set(row_idx_res, 0, arg_value);
+    }
+}
+
+// Since only supporting SUM, just add two values
+template <typename VTCol>
+static void UpdateAggColInResult(Frame *res, const Frame *arg, int64_t row_idx_arg, int64_t row_idx_res,
+                                 int64_t colIdx_arg, int64_t colIdx_res) {
+    auto argSchema = arg->getSchema();
+    if (argSchema[colIdx_arg] == ValueTypeUtils::codeFor<VTCol>) {
+        auto result_value = res->getColumn<VTCol>(colIdx_res)->get(row_idx_res, 0);
+        const auto arg_value = arg->getColumn<VTCol>(colIdx_arg)->get(row_idx_arg, 0);
+        res->getColumn<VTCol>(colIdx_res)->set(row_idx_res, 0, arg_value + result_value);
+    }
+}
+
+inline void groupSum(
+    // results
+    Frame *&res,
+    // input frames
+    const Frame *arg,
+    // input agg column names
+    const char *aggCol,
+    // input group by columns
+    const char **groupCols, size_t numGroupCols,
+    // context
+    DCTX(ctx)) {
+
+    // Perhaps check if res already allocated.
+    const size_t numRow = arg->getNumRows();
+
+    int64_t col_idx_res = 0;
+    int64_t row_idx_res = 0;
+
+    // get columns indexes in arg
+    int64_t aggColIdx = arg->getColumnIdx(aggCol);
+    int64_t groupColIdxArg[numGroupCols];
+    for (int64_t i = 0; i < numGroupCols; i++)
+        groupColIdxArg[i] = arg->getColumnIdx(groupCols[i]);
+
+    // Set up schema and labels for result Frame
+    ValueTypeCode schema[numGroupCols + 1];
+    std::string newlabels[numGroupCols + 1];
+
+    for (int64_t col_idx_arg = 0; col_idx_arg < numGroupCols; col_idx_arg++) {
+        schema[col_idx_res] = arg->getColumnType(groupColIdxArg[col_idx_arg]);
+        newlabels[col_idx_res++] = groupCols[col_idx_arg];
+    }
+    schema[numGroupCols] = arg->getColumnType(aggColIdx);
+    newlabels[numGroupCols] = std::string("SUM(") + std::string(aggCol) + std::string(")");
+
+    // Initialize result frame
+    res = DataObjectFactory::create<Frame>(numRow, numGroupCols + 1, schema, newlabels, false);
+
+    // unordered_map to store group colomns and its related row index in arg Frame.
+    std::unordered_map<std::vector<std::string>, int64_t, VectorStringHash, VectorStringEqual> colMap;
+
+    for (int64_t row_idx_arg = 0; row_idx_arg < numRow; row_idx_arg++) {
+        auto groupKey = createGroupKeyFromArgRow(arg, row_idx_arg, groupColIdxArg, numGroupCols);
+        if (colMap.find(groupKey) == colMap.end()) {
+            // add a new row to result for new columns group
+            colMap[groupKey] = row_idx_res;
+            for (int64_t Colidx = 0; Colidx < numGroupCols; Colidx++) {
+                addNewValueToResult<std::string>(res, arg, row_idx_arg, row_idx_res, groupColIdxArg[Colidx], Colidx);
+                addNewValueToResult<float>(res, arg, row_idx_arg, row_idx_res, groupColIdxArg[Colidx], Colidx);
+                addNewValueToResult<int64_t>(res, arg, row_idx_arg, row_idx_res, groupColIdxArg[Colidx], Colidx);
+            }
+            addNewValueToResult<float>(res, arg, row_idx_arg, row_idx_res, aggColIdx, numGroupCols);
+            addNewValueToResult<int64_t>(res, arg, row_idx_arg, row_idx_res, aggColIdx, numGroupCols);
+            row_idx_res++;
+        } else {
+            auto res_row_indx = colMap[groupKey];
+            UpdateAggColInResult<int64_t>(res, arg, row_idx_arg, res_row_indx, aggColIdx, numGroupCols);
+            UpdateAggColInResult<float>(res, arg, row_idx_arg, res_row_indx, aggColIdx, numGroupCols);
+        }
+    }
+
+    // Shrink result frame to actual size
+    res->shrinkNumRows(row_idx_res);
+}
 
 #endif // SRC_RUNTIME_LOCAL_KERNELS_GROUP_H

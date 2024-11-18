@@ -2933,6 +2933,39 @@
     },
     {
         "kernelTemplate": {
+            "header": "Group.h",
+            "opName": "groupSum",
+            "returnType": "void",
+            "templateParams": [],
+            "runtimeParams": [
+                {
+                    "type": "Frame *&",
+                    "name": "res"
+                },
+                {
+                    "type": "const Frame *",
+                    "name": "arg"
+                },
+                {
+                    "type": "const char *",
+                    "name": "aggCol"
+                },
+                {
+                    "type": "const char **",
+                    "name": "groupCols"
+                },
+                {
+                    "type": "size_t",
+                    "name": "numGroupCols"
+                }
+            ]
+        },
+        "instantiations": [
+            []
+        ]
+    },
+    {
+        "kernelTemplate": {
             "header": "InnerJoin.h",
             "opName": "innerJoin",
             "returnType": "void",

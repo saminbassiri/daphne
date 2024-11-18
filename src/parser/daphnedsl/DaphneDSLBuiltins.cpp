@@ -1033,6 +1033,20 @@ antlrcpp::Any DaphneDSLBuiltins::build(mlir::Location loc, const std::string &fu
                                  utils.matrixOfSizeType, lhs, rhs, lhsOn, rhsOn, rhsAgg)
             .getResults();
     }
+    if (func == "groupSum") {
+        checkNumArgsMin(loc, func, numArgs, 3);
+        mlir::Value arg = args[0];
+        mlir::Value aggCol = args[1];
+        std::vector<mlir::Value> groupCols;
+        // get group columns
+        for (auto column : args) {
+            mlir::Type t = column.getType();
+            if (llvm::isa<mlir::daphne::StringType>(t) && column != aggCol)
+                groupCols.push_back(column);
+        }
+        return static_cast<mlir::Value>(builder.create<GroupSumOp>(
+            loc, FrameType::get(builder.getContext(), {utils.unknownType, utils.unknownType}), arg, aggCol, groupCols));
+    }
 
     // ********************************************************************
     // Frame label manipulation

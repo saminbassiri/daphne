@@ -1157,6 +1157,16 @@ def Daphne_GroupJoinOp : Daphne_Op<"groupJoin", [
     let results = (outs FrameOrU:$res, MatrixOf<[Size]>:$lhsTids);
 }
 
+def Daphne_GroupSumOp : Daphne_Op<"groupSum", [
+    SameVariadicOperandSize,
+    DeclareOpInterfaceMethods<InferFrameLabelsOpInterface>,
+    DeclareOpInterfaceMethods<InferTypesOpInterface>,
+    DeclareOpInterfaceMethods<InferShapeOpInterface>
+]> {
+    let arguments = (ins FrameOrU:$arg, StrScalar:$aggCol, Variadic<StrScalar>:$groupCols);
+    let results = (outs FrameOrU:$res);
+}
+
 // ----------------------------------------------------------------------------
 // Selection
 // ----------------------------------------------------------------------------

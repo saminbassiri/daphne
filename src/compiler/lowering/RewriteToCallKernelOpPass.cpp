@@ -56,6 +56,8 @@ class KernelReplacement : public RewritePattern {
             return 4;
         if (llvm::isa<daphne::GroupOp>(op))
             return 3;
+        if (llvm::isa<daphne::GroupSumOp>(op))
+            return 3;
         if (llvm::isa<daphne::CreateFrameOp, daphne::SetColLabelsOp>(op))
             return 2;
         if (llvm::isa<daphne::DistributedComputeOp, daphne::CreateListOp>(op))
@@ -96,6 +98,11 @@ class KernelReplacement : public RewritePattern {
         if (auto concreteOp = llvm::dyn_cast<daphne::GroupOp>(op)) {
             auto idxAndLen = concreteOp.getODSOperandIndexAndLength(index);
             static bool isVariadic[] = {false, true, true};
+            return std::make_tuple(idxAndLen.first, idxAndLen.second, isVariadic[index]);
+        }
+        if (auto concreteOp = llvm::dyn_cast<daphne::GroupSumOp>(op)) {
+            auto idxAndLen = concreteOp.getODSOperandIndexAndLength(index);
+            static bool isVariadic[] = {false, false, true};
             return std::make_tuple(idxAndLen.first, idxAndLen.second, isVariadic[index]);
         }
         if (auto concreteOp = llvm::dyn_cast<daphne::ThetaJoinOp>(op)) {
