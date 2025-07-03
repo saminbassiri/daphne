@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../assets/logo_small.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.15">
     
     
       
@@ -373,7 +373,7 @@
   
   
   <span class="md-ellipsis">
-    Overview
+    Index
     
   </span>
   
@@ -1362,6 +1362,29 @@
   
   
     <li class="md-nav__item">
+      <a href="../development/PropertyInference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    PropertyInference
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../development/PropertyRecording/" class="md-nav__link">
         
   
@@ -1422,8 +1445,8 @@
   
 
 
-<h1 id="profiling-daphne-using-papi">Profiling DAPHNE using PAPI</h1>
-<p>You can profile your DAPHNE script by using the <code>--enable-profiling</code> CLI
+<h1 id="profiling-daphne-using-papi">Profiling DAPHNE Using PAPI</h1>
+<p>You can profile your DaphneDSL script by using the <code>--enable-profiling</code> CLI
 switch.
 Note that profiling is only available if DAPHNE was built <em>without</em> the <code>--no-papi</code> flag.</p>
 <p>DAPHNE supports profiling via the <a href="https://github.com/icl-utk-edu/papi">PAPI</a>
@@ -1431,13 +1454,13 @@ profiling library, specifically the
 <a href="https://github.com/icl-utk-edu/papi/wiki/PAPI-HL">high-level (HL) PAPI API</a>.</p>
 <p>When run with profiling enabled, the DAPHNE compiler will generate code that
 automatically starts and stops profiling (via PAPI) at the start and end of the
-DAPHNE script.</p>
+DaphneDSL script.</p>
 <p>You can configure which events to profile via the <code>PAPI_EVENTS</code>
-environmental variable, e.g.:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>$<span class="w"> </span><span class="nv">PAPI_EVENTS</span><span class="o">=</span><span class="s2">&quot;perf::CYCLES,perf::INSTRUCTIONS,perf::CACHE-REFERENCES,perf::CACHE MISSES,perf::BRANCHES,perf::BRANCH-MI SSES&quot;</span><span class="w"> </span><span class="nv">PAPI_REPORT</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>./daphne<span class="w"> </span>--enable-profiling<span class="w"> </span>script.daph
+environment variable, e.g.:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>$<span class="w"> </span><span class="nv">PAPI_EVENTS</span><span class="o">=</span><span class="s2">&quot;perf::CYCLES,perf::INSTRUCTIONS,perf::CACHE-REFERENCES,perf::CACHE MISSES,perf::BRANCHES,perf::BRANCH-MI SSES&quot;</span><span class="w"> </span><span class="nv">PAPI_REPORT</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>bin/daphne<span class="w"> </span>--enable-profiling<span class="w"> </span>script.daph
 </code></pre></div>
 <p>For more details about the supported events as well as other PAPI-HL configuration
-options you can check the
+options you can read the
 <a href="https://github.com/icl-utk-edu/papi/wiki/PAPI-HL#overview-of-environment-variables">PAPI HL API documentation</a>.
 You can also get a list of the supported events on your machine via the
 <code>papi_native_avail</code> PAPI utility (included in the <code>papi-tools</code> package
@@ -1493,7 +1516,7 @@ on Debian-based systems).</p>
       <script id="__config" type="application/json">{"base": "..", "features": ["content.code.copy", "navigation.tabs", "navigation.tabs.sticky"], "search": "../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      <script src="../assets/javascripts/bundle.56ea9cef.min.js"></script>
       
         <script src="../javascripts/mathjax.js"></script>
       

@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../assets/logo_small.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.15">
     
     
       
@@ -373,7 +373,7 @@
   
   
   <span class="md-ellipsis">
-    Overview
+    Index
     
   </span>
   
@@ -1495,6 +1495,29 @@
   
   
     <li class="md-nav__item">
+      <a href="../../development/PropertyInference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    PropertyInference
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../development/PropertyRecording/" class="md-nav__link">
         
   
@@ -1667,7 +1690,7 @@
 A general introduction to <a href="/daphne/DaphneLib/Overview">DaphneLib (DAPHNE's Python API)</a> can be found in a separate document.
 DaphneLib offers numerous methods for <em>obtaining DAPHNE matrices and frames</em> as well as for <em>building complex computations</em> based on them, including complex control flow with if-then-else, loops, and user-defined functions.
 Ultimately, DaphneLib will support all <a href="/daphne/DaphneDSL/Builtins">DaphneDSL built-in functions</a> on matrices and frames.
-Futhermore, <strong>we also plan to create a library of higher-level primitives</strong> allowing users to productively implement integrated data analysis pipelines at a much higher level of abstraction.</p>
+Furthermore, <strong>we also plan to create a library of higher-level primitives</strong> allowing users to productively implement integrated data analysis pipelines at a much higher level of abstraction.</p>
 <p>At the moment, the documentation is still rather incomplete.
 However, as the methods largely map to DaphneDSL built-in functions, you can find some more information in the <a href="/daphne/DaphneDSL/Builtins">List of DaphneDSL built-in functions</a>, for the time being.</p>
 <h2 id="obtaining-daphne-matrices-and-frames">Obtaining DAPHNE Matrices and Frames</h2>
@@ -1892,7 +1915,7 @@ In the following, we describe only the latter.</p>
 </ul>
 <h2 id="building-complex-control-structures">Building Complex Control Structures</h2>
 <p>Complex control structures like if-then-else, for-loops, while-loops and do-while-loops can be built using methods of the <code>DaphneContext</code>.
-These control structures can be used to manipulate matrices, frames, and scalars, and are lazily evaluated. Futhermore, user-defined functions can be created to build reusable code which can then be again lazily evaluated.
+These control structures can be used to manipulate matrices, frames, and scalars, and are lazily evaluated. Furthermore, user-defined functions can be created to build reusable code which can then be again lazily evaluated.
 User-defined functions can manipulate matrices, frames, and scalars, too.</p>
 <h3 id="daphnecontext-api-reference_2"><code>DaphneContext</code> API Reference</h3>
 <p><strong>If-then-else</strong></p>
@@ -1937,8 +1960,8 @@ User-defined functions can manipulate matrices, frames, and scalars, too.</p>
 <li><strong><code>@function</code></strong>, <strong><code>function</code></strong><code>(callback)</code><ul>
 <li>callback: Callable<ul>
 <li>This function requires adding typing hints in case the arguments are supposed to be handled as <code>Scalar</code> or <code>Frame</code>, all arguments without hints are handled as <code>Matrix</code> objects.
-  Hinting <code>Matrix</code> is optional.
-  Wrong or missing typing hints can trigger errors before and during computing (lazy evaluation).</li>
+    Hinting <code>Matrix</code> is optional.
+    Wrong or missing typing hints can trigger errors before and during computing (lazy evaluation).</li>
 </ul>
 </li>
 <li>returns: Tuple[VALID_COMPUTED_TYPES]  <em>(length equals the return values of callback)</em></li>
@@ -1997,7 +2020,7 @@ User-defined functions can manipulate matrices, frames, and scalars, too.</p>
       <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy", "navigation.tabs", "navigation.tabs.sticky"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      <script src="../../assets/javascripts/bundle.56ea9cef.min.js"></script>
       
         <script src="../../javascripts/mathjax.js"></script>
       

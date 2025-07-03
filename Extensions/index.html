@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../assets/logo_small.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.15">
     
     
       
@@ -373,7 +373,7 @@
   
   
   <span class="md-ellipsis">
-    Overview
+    Index
     
   </span>
   
@@ -1460,6 +1460,29 @@
   
   
     <li class="md-nav__item">
+      <a href="../development/PropertyInference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    PropertyInference
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../development/PropertyRecording/" class="md-nav__link">
         
   
@@ -1613,11 +1636,11 @@ All files shown below can be found in <code>/scripts/examples/extensions/myKerne
 <p>A kernel extension consists at least of the following:</p>
 <ul>
 <li>A <em>C++ source file</em>, which includes some essential DAPHNE headers and defines one or multiple kernel functions.
-  The kernel functions have to follow a certain interface <strong>(*)</strong> and have <code>extern "C"</code> linkage.
-  Within the kernel functions, extension developers have a lot of freedom.
-  Nevertheless, we also plan to provide some best practices and helpers to make extension development more productive.</li>
+    The kernel functions have to follow a certain interface <strong>(*)</strong> and have <code>extern "C"</code> linkage.
+    Within the kernel functions, extension developers have a lot of freedom.
+    Nevertheless, we also plan to provide some best practices and helpers to make extension development more productive.</li>
 <li>A <em>kernel catalog JSON file</em>, which provides some essential information on the kernels provided in the extension, such that DAPHNE knows how to use them.
-  This information includes: the mnemonic of the DaphneIR operation <strong>(*)</strong>, the name of the kernel function, the list of result/argument types, the backend (e.g. CPU or a specific hardware accelerator), and the path to the shared library of the extension (relative to this JSON file).</li>
+    This information includes: the mnemonic of the DaphneIR operation <strong>(*)</strong>, the name of the kernel function, the list of result/argument types, the backend (e.g. CPU or a specific hardware accelerator), and the path to the shared library of the extension (relative to this JSON file).</li>
 <li>To build the extension, it is recommendable (but not required) to include a Makefile or similar as well.</li>
 </ul>
 <p><strong>(*)</strong> <em>We will add a concrete list of DaphneIR operations for which custom kernels can be added later.
@@ -1832,7 +1855,7 @@ As the <code>myKernels</code> extension provides two kernels for the same operat
       <script id="__config" type="application/json">{"base": "..", "features": ["content.code.copy", "navigation.tabs", "navigation.tabs.sticky"], "search": "../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      <script src="../assets/javascripts/bundle.56ea9cef.min.js"></script>
       
         <script src="../javascripts/mathjax.js"></script>
       
